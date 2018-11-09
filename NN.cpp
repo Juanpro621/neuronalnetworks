@@ -18,6 +18,7 @@ void read_data(){
 		}
 		for(int i=0; i<n; i++){
 	    	std::getline(std::cin, line);
+	    	
 		}
 	}
 }
