@@ -20,7 +20,7 @@ std::vector<std::string> buffer2;
 std::vector<muestra> test_set;
 std::vector<float> weights;
 int m, n, d, pred, bias;
-float learnf, w_bias, threshold, error, res;
+float learnf, w_bias, threshold, error, res, delta;
 
 
 std::vector<std::string> splitStrings(std::string str, char dl) 
@@ -55,50 +55,57 @@ void read_data(){
     	muestra muestra1;
 		std::getline(std::cin, line);
 		buffer = splitStrings(line,',');
-		for (int j=0; j <= d; j++){
+		for (int j=0; j < d; j++){
 			muestra1.inputs.push_back(std::stof(buffer[j]));
 		}
 		muestra1.value = std::stoi(buffer.back());
 		training_set.push_back(muestra1);
 	}
 	for(int i=0; i<n; i++){
-    	muestra muestra1;
+    	muestra muestra2;
 		std::getline(std::cin, line);
 		buffer2 = splitStrings(line,',');
-		for (int j=0; j <= d; j++){
-			muestra1.inputs.push_back(std::stof(buffer[j]));
+		for (int j=0; j < d; j++){
+			muestra2.inputs.push_back(std::stof(buffer2[j]));
 		}
-		test_set.push_back(muestra1);
+		test_set.push_back(muestra2);
 	}
 	for(int i = 0; i <= d; i++){
-		float random = (rand() % 100) / 100;
+		float random = (rand() % 100) / 100.0;
 		weights.push_back(random);
 	}
 }
 
 void learn(){	
-	bias = 1; 
+	bias = 1.0; 
 	learnf = 0.05;
-	w_bias = (rand() % 100) / 100;
-	threshold = bias * w_bias;
-	error;
+	w_bias = (rand() % 100) / 100.0;
 	res = 0;
-	for(int i = 0; i < 50; i++){
-		for(int j = 0; j<training_set.size(); j++){
-			for (int k = 0; k < d; k++)
+	threshold = bias * w_bias;
+	for(int i = 0; i < 5; i++){
+		for(int j = 0; j < training_set.size(); j++){
+			res = 0;
+			for (int k = 0; k < d; k++){
 				res = res + training_set[j].inputs[k]*weights[k];
+			}
 			if(res >= threshold)
 				pred = 1;
 			else
 				pred = 0;
-			error = training_set[j].value - pred;
-			for (int k = 0; k < d; k++)
-				weights[k] = ((int)((weights[k] + learnf * error * training_set[j].inputs[k]) * 100) % 100) / 100;
-			w_bias = ((int)((w_bias + learnf*error)*100)%100)/100;
+			error = (training_set[j].value - pred);
+			//std::cout << "training = " << pred << "\n" << std::flush;
+			for (int k = 0; k < d; k++){
+				delta = learnf * error * training_set[j].inputs[k];
+				//std::cout << "Delta = " << delta << "\n" << std::flush;
+				weights[k] = ((int)((weights[k] + delta) * 1000) % 1000) / 1000.0;
+			}
+			w_bias = ((int)((w_bias + learnf*error) * 1000) % 1000) / 1000.0;
+			threshold = bias * w_bias;
 		}
 	}
 }
 void go(){
+	threshold = bias * w_bias;
 	res = 0;
 	for(int i = 0; i < test_set.size(); i++){
 		for(int j = 0; j < d; j++)
@@ -113,7 +120,16 @@ void go(){
 int main(){
 	srand(time(NULL));
 	read_data();
+	std::cout << "Hello \n" << std::flush;
+	for(int i = 0; i < weights.size(); i++){
+		std::cout << "Weight = " << weights[i] << "\n" << std::flush;
+	}
 	learn();
+	std::cout << "Hello2 \n" << std::flush;
+	for(int i = 0; i < weights.size(); i++){
+		std::cout << "Weight = " << weights[i] << "\n" << std::flush;
+	}
+	std::cout << "Threshold = " << threshold << "\n" << std::flush;
 	go();
 	return 0;
 }
