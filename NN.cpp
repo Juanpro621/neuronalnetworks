@@ -120,8 +120,8 @@ void go(){
 int main(){
 	srand(time(NULL));
 	read_data();
-	std::cout << "Hello \n" << std::flush;
-	/*for(int i = 0; i < weights.size(); i++){
+/*	std::cout << "Hello \n" << std::flush;
+	for(int i = 0; i < weights.size(); i++){
 		std::cout << "Weight = " << weights[i] << "\n" << std::flush;
 	}
 	learn();
