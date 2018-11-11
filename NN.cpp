@@ -82,7 +82,7 @@ void learn(){
 	w_bias = (rand() % 100) / 100.0;
 	res = 0;
 	threshold = bias * w_bias;
-	for(int i = 0; i < 5; i++){
+	for(int i = 0; i < 100; i++){
 		for(int j = 0; j < training_set.size(); j++){
 			res = 0;
 			for (int k = 0; k < d; k++){
