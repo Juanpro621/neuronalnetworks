@@ -16,6 +16,7 @@ class muestra{
 
 std::vector<muestra> training_set;
 std::vector<std::string> buffer;
+std::vector<std::string> buffer2;
 std::vector<muestra> test_set;
 std::vector<float> weights;
 int m, n, d, pred, bias;
@@ -45,17 +46,11 @@ std::vector<std::string> splitStrings(std::string str, char dl)
 void read_data(){
 	std::string line;
     std::getline(std::cin, line);
-    std::cout<<"line = " << line << "\n" << std::flush;
 	d = std::stoi(line);
-    std::cout<<"flag 0" << d << "\n" << std::flush;
     std::getline(std::cin, line);
-    std::cout<<"line = " << line << "\n" << std::flush;
     m = std::stoi(line);
-    std::cout<<"flag 1" << m << "\n" <<std::flush;
 	std::getline(std::cin, line);
-    std::cout<<"line = " << line << "\n" << std::flush;
     n = std::stoi(line);
-    std::cout<<"flag 1" << n << "\n" <<std::flush; 
 	for(int i=0; i<m; i++){
     	muestra muestra1;
 		std::getline(std::cin, line);
@@ -67,14 +62,14 @@ void read_data(){
 		training_set.push_back(muestra1);
 	}
 	for(int i=0; i<n; i++){
-    	muestra muestra2;
+    	muestra muestra1;
 		std::getline(std::cin, line);
-		buffer = splitStrings(line,',');
+		buffer2 = splitStrings(line,',');
 		for (int j=0; j <= d; j++){
-			muestra2.inputs.push_back(std::stof(buffer[j]));
+			muestra1.inputs.push_back(std::stof(buffer[j]));
 		}
+		test_set.push_back(muestra1);
 	}
-	std::cout<<"flag 3\n" << std::flush;
 	for(int i = 0; i <= d; i++){
 		float random = (rand() % 100) / 100;
 		weights.push_back(random);
@@ -88,7 +83,6 @@ void learn(){
 	threshold = bias * w_bias;
 	error;
 	res = 0;
-	std::cout<<"flag 4\n" << std::flush;
 	for(int i = 0; i < 50; i++){
 		for(int j = 0; j<training_set.size(); j++){
 			for (int k = 0; k < d; k++)
@@ -105,7 +99,6 @@ void learn(){
 	}
 }
 void go(){
-	std::cout<<"flag 5\n" << std::flush;
 	res = 0;
 	for(int i = 0; i < test_set.size(); i++){
 		for(int j = 0; j < d; j++)
@@ -115,6 +108,7 @@ void go(){
 		else
 			std::cout << "0" << "\n";
 	}
+	return;
 }
 int main(){
 	srand(time(NULL));
