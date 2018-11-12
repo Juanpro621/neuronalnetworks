@@ -24,24 +24,24 @@ float learnf, w_bias, threshold, error, res, delta;
 bool passed = true;
 
 
-std::vector<std::string> splitStrings(std::string str, char dl) 
-{ 
-    std::string word = ""; 
-    int num = 0; 
-    str = str + dl; 
-    int l = str.size(); 
-  
-    std::vector<std::string> substr_list; 
-    for (int i = 0; i < l; i++) { 
-        if (str[i] != dl) 
-            word = word + str[i]; 
+std::vector<std::string> splitStrings(std::string str, char dl)
+{
+    std::string word = "";
+    int num = 0;
+    str = str + dl;
+    int l = str.size();
+
+    std::vector<std::string> substr_list;
+    for (int i = 0; i < l; i++) {
+        if (str[i] != dl)
+            word = word + str[i];
         else {
-            if ((int)word.size() != 0) 
-                substr_list.push_back(word); 
-            word = ""; 
-        } 
-    } 
-    return substr_list; 
+            if ((int)word.size() != 0)
+                substr_list.push_back(word);
+            word = "";
+        }
+    }
+    return substr_list;
 }
 
 void read_data(){
@@ -77,18 +77,19 @@ void read_data(){
 	}
 }
 
-void learn(){	
-	bias = 1.0; 
+void learn(){
+	bias = 1.0;
 	learnf = 0.05;
 	w_bias = (rand() % 100) / 100.0;
 	res = 0;
-	threshold = bias * w_bias;
-	for(int i = 0; i < 200; i++){
+	threshold = bias;
+	for(int i = 0; i < 300; i++){
 		for(int j = 0; j < training_set.size(); j++){
 			res = 0;
 			for (int k = 0; k < d; k++){
 				res = res + training_set[j].inputs[k]*weights[k];
 			}
+			res=res + bias*w_bias;
 			if(res >= threshold)
 				pred = 1;
 			else
@@ -101,7 +102,7 @@ void learn(){
 				weights[k] = ((int)((weights[k] + delta) * 1000) % 1000) / 1000.0;
 			}
 			w_bias = ((int)((w_bias + learnf*error) * 1000) % 1000) / 1000.0;
-			threshold = bias * w_bias;
+			threshold = bias;
 		}
 	}
 }
@@ -111,6 +112,7 @@ void test(){
 		for (int k = 0; k < d; k++){
 			res = res + training_set[j].inputs[k]*weights[k];
 		}
+		res=res+w_bias;
 		if(res >= threshold)
 			pred = 1;
 		else
@@ -130,12 +132,13 @@ void go(){
 			res = 0;
 			for(int j = 0; j < d; j++)
 				res = res + test_set[i].inputs[j]*weights[j];
+				res=res+w_bias;
 			if(res >= threshold)
 				std::cout << "1" << "\n";
 			else
 				std::cout << "0" << "\n";
-		}	
-	}	
+		}
+	}
 	return;
 }
 int main(){
@@ -147,7 +150,7 @@ int main(){
 	for(int i = 0; i < weights.size(); i++){
 		std::cout << "Weight = " << weights[i] << "\n" << std::flush;
 	}
-	
+
 	std::cout << "Hello2 \n" << std::flush;
 	for(int i = 0; i < weights.size(); i++){
 		std::cout << "Weight = " << weights[i] << "\n" << std::flush;
