@@ -23,24 +23,24 @@ int m, n, d, pred, bias;
 float learnf, w_bias, threshold, error, res, delta;
 
 
-std::vector<std::string> splitStrings(std::string str, char dl) 
-{ 
-    std::string word = ""; 
-    int num = 0; 
-    str = str + dl; 
-    int l = str.size(); 
-  
-    std::vector<std::string> substr_list; 
-    for (int i = 0; i < l; i++) { 
-        if (str[i] != dl) 
-            word = word + str[i]; 
+std::vector<std::string> splitStrings(std::string str, char dl)
+{
+    std::string word = "";
+    int num = 0;
+    str = str + dl;
+    int l = str.size();
+
+    std::vector<std::string> substr_list;
+    for (int i = 0; i < l; i++) {
+        if (str[i] != dl)
+            word = word + str[i];
         else {
-            if ((int)word.size() != 0) 
-                substr_list.push_back(word); 
-            word = ""; 
-        } 
-    } 
-    return substr_list; 
+            if ((int)word.size() != 0)
+                substr_list.push_back(word);
+            word = "";
+        }
+    }
+    return substr_list;
 }
 
 void read_data(){
@@ -59,6 +59,7 @@ void read_data(){
 			muestra1.inputs.push_back(std::stof(buffer[j]));
 		}
 		muestra1.value = std::stoi(buffer.back());
+        //std::cout<<muestra1.value;
 		training_set.push_back(muestra1);
 	}
 	for(int i=0; i<n; i++){
@@ -76,13 +77,13 @@ void read_data(){
 	}
 }
 
-void learn(){	
-	bias = 1.0; 
+void learn(){
+	bias = 1.0;
 	learnf = 0.05;
 	w_bias = (rand() % 100) / 100.0;
 	res = 0;
 	threshold = bias * w_bias;
-	for(int i = 0; i < 100; i++){
+	for(int i = 0; i < 100000; i++){
 		for(int j = 0; j < training_set.size(); j++){
 			res = 0;
 			for (int k = 0; k < d; k++){
@@ -109,11 +110,16 @@ void go(){
 	res = 0;
 	for(int i = 0; i < test_set.size(); i++){
 		for(int j = 0; j < d; j++)
+        {
 			res = res + test_set[i].inputs[j]*weights[j];
+		//std::cout<<weights[j];
+        }
+        //std::cout<<threshold;
 		if(res >= threshold)
 			std::cout << "1" << "\n";
 		else
 			std::cout << "0" << "\n";
+			res=0;
 	}
 	return;
 }
@@ -130,6 +136,7 @@ int main(){
 		std::cout << "Weight = " << weights[i] << "\n" << std::flush;
 	}
 	std::cout << "Threshold = " << threshold << "\n" << std::flush;*/
+	learn();
 	go();
 	return 0;
 }
